@@ -95,10 +95,7 @@ export const FoodInfo = ({ navigation, route }) => {
           <Text style={tw`text-xl font-bold p-3 pb-0  pt-6 `}>Description</Text>
           <Text style={tw` text-base p-3 `}>{description}</Text>
           <View style={tw`w-full`}>
-            <ScrollView horizontal
-            
-            style={tw`w-full `}
-            >
+            <ScrollView horizontal style={tw`w-full `}>
               {food?.map((item, index) => (
                 <CardFood key={index} {...{ ...item, Food }} />
               ))}
