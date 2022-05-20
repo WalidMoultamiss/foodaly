@@ -43,7 +43,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Food"
-        component={FoodNavigator}
+        component={Food}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
@@ -108,6 +108,11 @@ function RootNavigator() {
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="FoodInfo"
+        component={FoodInfo}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -133,6 +138,7 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <RootNavigator />
+      
     </NavigationContainer>
   );
 }
