@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions } from "react-native";
 import {
   Pressable,
   StyleSheet,
   Text,
   Image,
+  ActivityIndicator,
   TouchableOpacity,
   ScrollView,
   View,
@@ -25,6 +26,7 @@ export const CardFood = ({
 }) => {
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
+  const [imageLoaded, setImageLoaded] = useState(true);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -39,14 +41,25 @@ export const CardFood = ({
         });
       }}
       style={[
-        tw`p-3 bg-red-600 max-w-[50vw] items-center  m-1 w-[45%] rounded bg-white border-2 border-gray-300`,
+        tw`p-3 bg-red-600 max-w-[50vw] items-center  m-1 w-[45%] rounded bg-white my-2`,
         { maxWidth: windowWidth * 0.45 },
+        style.shadow
       ]}
     >
       <View style={tw`w-[110px] h-[110px]`}>
+        {imageLoaded && (
+          <View
+            style={tw`w-full bg-gray-50 rounded-full h-full justify-center items-center`}
+          >
+            <ActivityIndicator size="small" color="#ff0000" />
+          </View>
+        )}
         <Image
           source={{
             uri: image[0],
+          }}
+          onLoad={() => {
+            setImageLoaded(false);
           }}
           style={tw`w-full h-full rounded-full`}
         />
@@ -61,3 +74,16 @@ export const CardFood = ({
     </TouchableOpacity>
   );
 };
+
+const style = StyleSheet.create({
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+});

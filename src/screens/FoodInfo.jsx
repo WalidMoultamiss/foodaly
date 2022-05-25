@@ -1,17 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, ScrollView,ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
 import tw from "twrnc";
 import { useState } from "react";
 import { CardFood } from "../components/CardFood";
-import { WebView } from 'react-native-webview';
-
+import { WebView } from "react-native-webview";
 
 const Stars = ({ rating }) => {
   return (
@@ -89,6 +82,8 @@ export const FoodInfo = ({ navigation, route }) => {
   const { name, image, description, price, rating, food } = route.params;
   const Food = food;
   const [count, setCount] = useState(1);
+  const [imageLoaded, setImageLoaded] = useState(true);
+
 
   return (
     <View
@@ -96,10 +91,27 @@ export const FoodInfo = ({ navigation, route }) => {
         flex: 1,
       }}
     >
-      <Image source={{ uri: image[0] }} style={tw`w-full h-[400px]`} />
+      {imageLoaded && (
+          <View
+            style={tw`w-full  h-[400px] justify-center items-center`}
+          >
+            <ActivityIndicator size="small" color="#ff0000" />
+          </View>
+        )}
+      <Image
+      
+      onLoadEnd={
+        () => {
+          setImageLoaded(false);
+        }
+
+      }
+      source={{ uri: image[0] }} style={tw`w-full h-[400px]`} />
       <ScrollView style={tw`h-full absolute w-full left-0 top-0 pt-[380px]`}>
         <View
-          style={tw`p-3 flex h-full rounded-t-3xl bg-gray-50 pb-[200px] mb-[300px] flex-col`}
+          style={[tw`p-3 flex h-full rounded-t-3xl bg-gray-50 pb-[200px] mb-[300px] flex-col`,
+          style.shadow
+        ]}
         >
           <View style={tw`flex-row justify-center items-center`}>
             <View style={tw`w-10 p-1 rounded-full bg-gray-800`} />
@@ -120,7 +132,9 @@ export const FoodInfo = ({ navigation, route }) => {
             {price * count} dh
           </Text>
           <Text style={tw`text-xl font-bold p-3 pb-0  pt-6 `}>Description</Text>
-          <Text style={tw` text-base p-3 `}>{description}</Text>
+          <Text style={tw` text-base p-3 `}>
+            {description.replace(/[<p></p>]/gi, "")}
+          </Text>
           <View style={tw`w-full`}>
             <ScrollView horizontal style={tw`w-full `}>
               {food?.map((item, index) => (
@@ -134,3 +148,16 @@ export const FoodInfo = ({ navigation, route }) => {
     </View>
   );
 };
+
+const style = StyleSheet.create({
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 10,
+  },
+});

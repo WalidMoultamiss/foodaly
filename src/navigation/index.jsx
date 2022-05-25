@@ -138,7 +138,6 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <RootNavigator />
-      
     </NavigationContainer>
   );
 }

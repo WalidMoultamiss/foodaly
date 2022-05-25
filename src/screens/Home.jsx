@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef } from "react";
 import { StatusBar } from "expo-status-bar";
+import LottieView from "lottie-react-native";
 import {
   Pressable,
   StyleSheet,
@@ -18,6 +19,7 @@ import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
 import { PharmacyInfo } from "../components/modals/PharmacyInfo";
 import { CardFood } from "../components/CardFood";
+import { MenuCardFood } from "../components/MenuCardFood";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -25,6 +27,11 @@ const wait = (timeout) => {
 
 export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
+  const animation = useRef(null);
+  useEffect(() => {
+    // You can control the ref programmatically, rather than using autoPlay
+    // animation.current?.play();
+  }, []);
 
   const [Food, setFood] = useState([]);
   const [menu, setMenu] = useState([]);
@@ -50,7 +57,7 @@ export default function Home() {
       redirect: "follow",
     };
 
-    fetch("https://328d-197-230-250-154.ngrok.io/gql", requestOptions)
+    fetch("https://foodaly.herokuapp.com/gql", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setFood(result.data.getAllProducts);
@@ -74,7 +81,7 @@ export default function Home() {
       redirect: "follow",
     };
 
-    fetch("https://328d-197-230-250-154.ngrok.io/gql", requestOptions)
+    fetch("https://foodaly.herokuapp.com/gql", requestOptions)
       .then((response) => response.json())
       .then((result) => setMenu(result.data.getAllMenu))
       .catch((error) => console.log("error", error));
@@ -95,54 +102,31 @@ export default function Home() {
       <View style={tw`p-3  pt-4 `}>
         <Text style={tw`text-3xl font-bold`}>Our Food</Text>
       </View>
+
       <View style={tw`p-3 flex-wrap flex-row w-full justify-evenly pt-0`}>
+        {Food.length === 0 && (
+          <LottieView
+            autoPlay
+            ref={animation}
+            style={{
+              width: 200,
+              height: 200,
+              backgroundColor: "#eee",
+            }}
+            // Find more Lottie files at https://lottiefiles.com/featured
+            source={require("../../assets/lottie/loading.json")}
+          />
+        )}
         {Food?.map((item, index) => (
           <CardFood key={index} {...{ ...item, Food }} />
         ))}
       </View>
       <View style={tw`p-3  pt-4 `}>
-
-          <Text style={tw`text-3xl font-bold mb-6 mt-10`}>Our Menu</Text>
+        <Text style={tw`text-3xl font-bold mb-6 mt-10`}>Our Menu</Text>
 
         {menu.map((_, idx) => {
           return (
-            <View style={tw`border-gray-200 border-t-2 my-4 `} key={idx}>
-              <View style={tw`flex-row justify-between items-center`}>
-                <Text style={tw`text-3xl font-bold mt-6  `}>{_.name}</Text>
-                <TouchableOpacity
-                  style={tw` text-sm rounded-full p-1 bg-red-600`}
-                >
-                  <Text style={tw`text-sm  text-white`}>View More</Text>
-                </TouchableOpacity>
-              </View>
-              <ScrollView horizontal style={tw`w-full `}>
-                {_.productIds.map((item, index) => (
-                  <View key={index} style={tw`items-center m-3`}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigation.navigate("FoodInfo", {
-                          name: item.name,
-                          image: item.image,
-                          isFav: true,
-                          price: item.price,
-                          rating: 4,
-                          description: item.description,
-                          food: Food,
-                        });
-                      }}
-                    style={tw`w-[110px] h-[110px]`}>
-                      <Image
-                        style={tw`w-full h-full  rounded-full`}
-                        source={{
-                          uri: item.image[0],
-                        }}
-                      />
-                    </TouchableOpacity>
-                    <Text style={tw`text-xl font-bold`}>{item.name}</Text>
-                  </View>
-                ))}
-              </ScrollView>
-            </View>
+            <MenuCardFood key={idx} menu={_} navigation={navigation} Food={Food} />
           );
         })}
       </View>
