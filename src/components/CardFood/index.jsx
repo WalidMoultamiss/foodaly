@@ -43,7 +43,7 @@ export const CardFood = ({
       style={[
         tw`p-3 bg-red-600 max-w-[50vw] items-center  m-1 w-[45%] rounded bg-white my-2`,
         { maxWidth: windowWidth * 0.45 },
-        style.shadow
+        style.shadow,
       ]}
     >
       <View style={tw`w-[110px] h-[110px]`}>
@@ -82,7 +82,7 @@ const style = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
   },

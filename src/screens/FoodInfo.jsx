@@ -1,10 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { View, Text, Image, ScrollView,ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import tw from "twrnc";
 import { useState } from "react";
 import { CardFood } from "../components/CardFood";
 import { WebView } from "react-native-webview";
+import { useDispatch } from "react-redux";
+import { addPrice } from "../app/features/cart/cartSlice";
 
 const Stars = ({ rating }) => {
   return (
@@ -24,13 +34,26 @@ const Stars = ({ rating }) => {
   );
 };
 
-const FoodOrder = ({ price }) => {
+export const addToCart = (price, dispatch, addPrice) => {
+  dispatch(addPrice(price));
+};
+export const FoodOrder = ({ price }) => {
+  const dispatch = useDispatch();
+
   return (
     <View
       style={tw`flex-row pb-7 justify-between items-center w-full rounded-t-3xl bg-white absolute bottom-0 p-5 z-50 `}
     >
       <Text style={tw`text-2xl font-black`}>Total: {price} dh</Text>
       <TouchableOpacity
+        onPress={() => {
+          addToCart(
+            price,
+            dispatch,
+            addPrice
+          );
+          alert("add to cart");
+        }}
         style={tw`p-2 rounded-2xl flex-row justify-between items-center bg-red-600`}
       >
         <Ionicons name="md-cart" size={20} color="white" />
@@ -84,7 +107,6 @@ export const FoodInfo = ({ navigation, route }) => {
   const [count, setCount] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(true);
 
-
   return (
     <View
       style={{
@@ -92,26 +114,23 @@ export const FoodInfo = ({ navigation, route }) => {
       }}
     >
       {imageLoaded && (
-          <View
-            style={tw`w-full  h-[400px] justify-center items-center`}
-          >
-            <ActivityIndicator size="small" color="#ff0000" />
-          </View>
-        )}
+        <View style={tw`w-full  h-[400px] justify-center items-center`}>
+          <ActivityIndicator size="small" color="#ff0000" />
+        </View>
+      )}
       <Image
-      
-      onLoadEnd={
-        () => {
+        onLoadEnd={() => {
           setImageLoaded(false);
-        }
-
-      }
-      source={{ uri: image[0] }} style={tw`w-full h-[400px]`} />
+        }}
+        source={{ uri: image[0] }}
+        style={tw`w-full h-[400px]`}
+      />
       <ScrollView style={tw`h-full absolute w-full left-0 top-0 pt-[380px]`}>
         <View
-          style={[tw`p-3 flex h-full rounded-t-3xl bg-gray-50 pb-[200px] mb-[300px] flex-col`,
-          style.shadow
-        ]}
+          style={[
+            tw`p-3 flex h-full rounded-t-3xl bg-gray-50 pb-[200px] mb-[300px] flex-col`,
+            style.shadow,
+          ]}
         >
           <View style={tw`flex-row justify-center items-center`}>
             <View style={tw`w-10 p-1 rounded-full bg-gray-800`} />

@@ -53,7 +53,16 @@ export const MenuCardFood = ({ menu, navigation , Food }) => {
     <View style={tw`border-gray-200 border-t-2 my-4 `}>
       <View style={tw`flex-row justify-between items-center`}>
         <Text style={tw`text-3xl font-bold mt-6  `}>{menu.name}</Text>
-        <TouchableOpacity style={tw` text-sm rounded-full p-1 bg-red-600`}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("MenuInfo",{
+              name: menu.name,
+              id: menu.id,
+              food:menu.productIds,
+              Food: Food,
+            });
+          }}
+        style={tw` text-sm rounded-full p-1 bg-red-600`}>
           <Text style={tw`text-sm  text-white`}>View More</Text>
         </TouchableOpacity>
       </View>

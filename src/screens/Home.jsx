@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import LottieView from "lottie-react-native";
 import {
@@ -20,6 +20,7 @@ import { Button, Icon } from "react-native-elements";
 import { PharmacyInfo } from "../components/modals/PharmacyInfo";
 import { CardFood } from "../components/CardFood";
 import { MenuCardFood } from "../components/MenuCardFood";
+import { useSelector } from "react-redux";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -32,6 +33,8 @@ export default function Home() {
     // You can control the ref programmatically, rather than using autoPlay
     // animation.current?.play();
   }, []);
+
+  const cart = useSelector((state) => state.cart);
 
   const [Food, setFood] = useState([]);
   const [menu, setMenu] = useState([]);
@@ -99,7 +102,7 @@ export default function Home() {
       }
       style={{ flex: 1 }}
     >
-      <View style={tw`p-3  pt-4 `}>
+      <View style={tw`p-3  pt-4 w-full `}>
         <Text style={tw`text-3xl font-bold`}>Our Food</Text>
       </View>
 
@@ -126,7 +129,12 @@ export default function Home() {
 
         {menu.map((_, idx) => {
           return (
-            <MenuCardFood key={idx} menu={_} navigation={navigation} Food={Food} />
+            <MenuCardFood
+              key={idx}
+              menu={_}
+              navigation={navigation}
+              Food={Food}
+            />
           );
         })}
       </View>

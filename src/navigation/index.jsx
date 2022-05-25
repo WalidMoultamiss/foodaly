@@ -5,6 +5,8 @@ import Home from "../screens/Home";
 import { Platform, TouchableOpacity, View } from "react-native";
 import { COLORS, FONTS } from "../constants/theme";
 import Profile from "../screens/Profile";
+import Cart from "../screens/Cart";
+
 import Pharmacies from "../screens/Pharmacies";
 import Food from "../screens/Food";
 import { FoodInfo } from "../screens/FoodInfo";
@@ -12,11 +14,15 @@ import { FoodInfo } from "../screens/FoodInfo";
 import { TabBarIcon, MapButton } from "../components/index";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { MenuInfo } from "../screens/MenuInfo";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
+  const cart = useSelector((state) => state.cart);
+
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -72,12 +78,12 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Commande"
-        component={Profile}
+        component={Cart}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
-              name="Favoris"
-              source={require("../../assets/png/heart.png")}
+              name={`Cart ${cart.total} dh`}
+              source={require("../../assets/png/cart.png")}
               isFocuse={focused}
             />
           ),
@@ -111,6 +117,11 @@ function RootNavigator() {
       <Stack.Screen
         name="FoodInfo"
         component={FoodInfo}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MenuInfo"
+        component={MenuInfo}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
