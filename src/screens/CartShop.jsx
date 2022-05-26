@@ -47,8 +47,12 @@ export default function CartShop() {
                 tw`flex-row p-3 justify-between items-center items-center flex-1 rounded-xl bg-white`,
               ]}
             >
-              <Text style={[tw`text-2xl font-black`]}>{item.name} × {item.quantity}</Text>
-              <Text style={[tw`text-2xl font-black`]}>{item.price} dh</Text>
+              <Text style={[tw`text-2xl font-black`]}>
+                {item.name} × {item.quantity}
+              </Text>
+              <Text style={[tw`text-2xl font-black`]}>
+                {item.price * item.quantity} dh
+              </Text>
             </View>
           </View>
         ))}

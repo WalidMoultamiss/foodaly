@@ -16,8 +16,7 @@ import { CardFood } from "../components/CardFood";
 import { WebView } from "react-native-webview";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "./FoodInfo";
-import { addPrice } from "../app/features/cart/cartSlice";
+import { addPrice, addToCart } from "../app/features/cart/cartSlice";
 
 const Stars = ({ rating }) => {
   return (
@@ -37,10 +36,17 @@ const Stars = ({ rating }) => {
   );
 };
 
-const FoodOrder = ({ price }) => {
+const FoodOrder = ({ price, products }) => {
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+
+  let newProducts = products.map((item) => {
+    return {
+      ...item,
+      quantity: count,
+    };
+  });
 
   const translateY = new Animated.Value(0);
   const opacity = new Animated.Value(0);
@@ -66,11 +72,17 @@ const FoodOrder = ({ price }) => {
         <Counter count={count} setCount={setCount} />
       </View>
       <View style={tw` flex-row justify-between items-center w-full`}>
-        
         <Text style={tw`text-2xl font-black`}>Total: {price * count} dh</Text>
         <TouchableOpacity
           onPress={() => {
-            addToCart(price * count, dispatch, addPrice);
+            newProducts.map((item) => {
+              return dispatch(
+                addToCart({
+                  product: item,
+                  quantity: count,
+                })
+              );
+            });
             alert("menu added to cart");
           }}
           style={tw`p-2 rounded-2xl flex-row justify-between items-center bg-red-600`}
@@ -161,7 +173,7 @@ export const MenuInfo = ({ navigation, route }) => {
           ))}
         </View>
       </ScrollView>
-      <FoodOrder price={price} />
+      <FoodOrder price={price} products={food} />
     </SafeAreaView>
   );
 };
