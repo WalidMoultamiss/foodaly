@@ -36,7 +36,7 @@ const Stars = ({ rating }) => {
   );
 };
 
-const FoodOrder = ({ price, products }) => {
+const FoodOrder = ({ price, products , navigation }) => {
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -84,6 +84,7 @@ const FoodOrder = ({ price, products }) => {
               );
             });
             alert("menu added to cart");
+            navigation.navigate("Commande");
           }}
           style={tw`p-2 rounded-2xl flex-row justify-between items-center bg-red-600`}
         >
@@ -173,7 +174,7 @@ export const MenuInfo = ({ navigation, route }) => {
           ))}
         </View>
       </ScrollView>
-      <FoodOrder price={price} products={food} />
+      <FoodOrder price={price} products={food} navigation={navigation} />
     </SafeAreaView>
   );
 };

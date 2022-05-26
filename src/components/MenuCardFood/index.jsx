@@ -37,7 +37,7 @@ const Card = ({ navigation, item ,Food }) => {
             onLoadEnd={() => {
                 setImageLoaded(false);
             }}
-          style={tw`w-full h-full  rounded-full`}
+          style={tw`w-full h-full bg-gray-200 rounded-full`}
           source={{
             uri: item.image[0],
           }}
