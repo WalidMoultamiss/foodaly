@@ -5,7 +5,7 @@ import Home from "../screens/Home";
 import { Platform, TouchableOpacity, View } from "react-native";
 import { COLORS, FONTS } from "../constants/theme";
 import Profile from "../screens/Profile";
-import Cart from "../screens/Cart";
+import CartShop from "../screens/CartShop";
 
 import Pharmacies from "../screens/Pharmacies";
 import Food from "../screens/Food";
@@ -78,7 +78,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Commande"
-        component={Cart}
+        component={CartShop}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon

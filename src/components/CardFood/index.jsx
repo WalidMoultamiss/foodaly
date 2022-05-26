@@ -13,6 +13,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import {addToCart} from "../../app/features/cart/cartSlice";
 import tw from "twrnc";
 
 export const CardFood = ({
@@ -27,6 +29,9 @@ export const CardFood = ({
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
   const [imageLoaded, setImageLoaded] = useState(true);
+
+  const dispatch = useDispatch();
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -41,7 +46,7 @@ export const CardFood = ({
         });
       }}
       style={[
-        tw`p-3 bg-red-600 max-w-[50vw] items-center  m-1 w-[45%] rounded bg-white my-2`,
+        tw`p-3 bg-red-600 max-w-[50vw] items-center  m-1 w-[45%] rounded-lg bg-white my-2`,
         { maxWidth: windowWidth * 0.45 },
         style.shadow,
       ]}
@@ -69,7 +74,21 @@ export const CardFood = ({
       <View
         style={tw`absolute top-2 right-2 flex-row items-center justify-center`}
       >
-        <Ionicons name="md-heart" size={24} color={isFav ? "red" : "black"} />
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(
+              addToCart({
+                product: {
+                  name: name,
+                  image: image[0],
+                  price: price,
+                },
+              })
+            );
+          }}
+        >
+          <Ionicons name="md-cart" size={24} color="red" />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
