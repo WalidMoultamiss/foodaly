@@ -80,9 +80,10 @@ export const CardFood = ({
               addToCart({
                 product: {
                   name: name,
-                  image: image[0],
+                  image: image,
                   price: price,
                 },
+                quantity: 1,
               })
             );
           }}

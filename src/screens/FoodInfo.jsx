@@ -14,7 +14,7 @@ import { useState } from "react";
 import { CardFood } from "../components/CardFood";
 import { WebView } from "react-native-webview";
 import { useDispatch } from "react-redux";
-import { addPrice } from "../app/features/cart/cartSlice";
+import { addPrice, addToCart } from "../app/features/cart/cartSlice";
 
 const Stars = ({ rating }) => {
   return (
@@ -34,10 +34,7 @@ const Stars = ({ rating }) => {
   );
 };
 
-export const addToCart = (price, dispatch, addPrice) => {
-  dispatch(addPrice(price));
-};
-export const FoodOrder = ({ price }) => {
+export const FoodOrder = ({ price, product, quantity }) => {
   const dispatch = useDispatch();
 
   return (
@@ -47,10 +44,11 @@ export const FoodOrder = ({ price }) => {
       <Text style={tw`text-2xl font-black`}>Total: {price} dh</Text>
       <TouchableOpacity
         onPress={() => {
-          addToCart(
-            price,
-            dispatch,
-            addPrice
+          dispatch(
+            addToCart({
+              product,
+              quantity,
+            })
           );
           alert("add to cart");
         }}
@@ -163,7 +161,17 @@ export const FoodInfo = ({ navigation, route }) => {
           </View>
         </View>
       </ScrollView>
-      <FoodOrder price={price * count} />
+      <FoodOrder
+        price={price * count}
+        product={{
+          name,
+          image,
+          description,
+          price,
+          rating,
+        }}
+        quantity={count}
+      />
     </View>
   );
 };
